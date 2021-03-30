@@ -72,7 +72,8 @@ main(int argc, char** argv) {
     GetPlayerInput(pieceToMove, requestedPosition);
     try {
       Board->PlayerMove(pieceToMove, requestedPosition);
-    } catch (std::runtime_error& err) {
+    } catch (std::runtime_error& e) {
+      std::cerr << "Caught runtime exception: " << e.what() << std::endl;
     }
   }
 

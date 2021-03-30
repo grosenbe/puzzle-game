@@ -14,11 +14,6 @@ using std::vector;
 using namespace PuzzleGame;
 
 PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const vector<PuzzlePiece> &computer, const vector<PuzzlePiece> &inert, const vector<PuzzlePiece> &sinks) : BoardSize(size) {
-  // invariants: Each player piece has exactly 1 corresponding puzzle piece,
-  // There
-  // are the same number of player and puzzle pieces
-  // Make sure there are no stacked pieces (player piece on top of computer or intert pieces)
-  // Make sure each piece is on the board (IE no coordinate bigger than size-1)
   if (computer.size() != player.size())
     throw std::runtime_error("Different number of player and computer pieces");
 
