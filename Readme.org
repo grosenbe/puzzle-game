@@ -1,2 +1,3 @@
 * Puzzle Game
-Player moves pieces within constraints, board matches the moves.
+Player moves pieces within constraints, board matches the moves. This repo contains a library
+(puzzle-game) and a very basic demo to print the board, as well as a unit test suite.
