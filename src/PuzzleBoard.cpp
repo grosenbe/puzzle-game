@@ -1,7 +1,5 @@
 #include "PuzzleBoard.h"
 
-#include <bits/stdint-uintn.h>
-
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
@@ -133,9 +131,9 @@ PuzzleBoard::PlayerMove(const std::string &pieceName, std::pair<uint32_t, uint32
   auto it2 = ComputerPieces.find(PuzzlePiece::PlayerOrientationToComputerOrientation[PuzzlePiece::PlayerPieceNameToOrientation[pieceName]]);
   auto currentComputerPosition = it2->second.GetPosition();
   auto newComputerPosition = currentComputerPosition;
-  if (currentComputerPosition.second + dx >= 0 || currentComputerPosition.second + dx < BoardSize)
+  if (static_cast<int32_t>(currentComputerPosition.second) + dx >= 0 || currentComputerPosition.second + dx < BoardSize)
     newComputerPosition.second = currentComputerPosition.second + dx;
-  if (currentComputerPosition.first - dy >= 0 || currentComputerPosition.first - dy < BoardSize)
+  if (static_cast<int32_t>(currentComputerPosition.first) - dy >= 0 || currentComputerPosition.first - dy < BoardSize)
     newComputerPosition.first = currentComputerPosition.first - dy;
 
   if (OccupiedPositions.find(newComputerPosition) == OccupiedPositions.end()) {
