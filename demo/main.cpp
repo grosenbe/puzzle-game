@@ -1,10 +1,5 @@
-#include <bits/stdint-uintn.h>
-
-#include <csignal>
 #include <iostream>
 #include <memory>
-#include <sstream>
-#include <stdexcept>
 
 #include "src/PuzzleBoard.h"
 #include "src/PuzzlePiece.h"
