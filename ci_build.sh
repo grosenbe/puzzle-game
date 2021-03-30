@@ -8,4 +8,4 @@ cd build
 cmake -G "Ninja" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=DEBUG ..
 cmake --build .
 
-valgrind test/puzzle-test
+test/puzzle-test
