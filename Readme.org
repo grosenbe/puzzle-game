@@ -1,3 +1,13 @@
 * Puzzle Game
 Player moves pieces within constraints, board matches the moves. This repo contains a library
 (puzzle-game) and a very basic demo to print the board, as well as a unit test suite.
+** Prerequesites
+   - gtest and gtest_main (available in most distros)
+   - gtest_main
+   - ninja (preferred) or make
+** To build on Linux
+   See the ci_build shell script.
+** To build on Windows
+   Haven't tested this repo yet, but since we're using cmake, it should be possible to download the
+   Windows cmake generator to create Visual Studio solutions. Alternatively, it's probably also
+   possible to build this in WSL.
