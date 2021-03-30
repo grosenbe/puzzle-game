@@ -41,7 +41,7 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
 
   bool positionValidated = false;
   while (!positionValidated) {
-    int32_t userRow, userCol;
+    uint32_t userRow, userCol;
     std::cout << "Enter new row: ";
     std::cin >> userRow;
     std::cout << "Enter new column: ";

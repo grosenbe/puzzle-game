@@ -1,6 +1,8 @@
 #ifndef PUZZLEBOARD_H_
 #define PUZZLEBOARD_H_
 
+#include <bits/stdint-uintn.h>
+
 #include <cstdint>
 #include <set>
 #include <string>
