@@ -1,0 +1,2 @@
+* Puzzle Game
+Player moves pieces within constraints, board matches the moves.
