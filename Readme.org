@@ -2,11 +2,11 @@
 Player moves pieces within constraints, board matches the moves. This repo contains a library
 (puzzle-game) and a very basic demo to print the board, as well as a unit test suite.
 
-The player and computer pieces are single-sided mirrors, and are named for the Cartesian
-quadrant in which their normal vectors point. For example, Q1 is a mirror that is oriented at a 45
-degree angle with respect to the base of the board. Its normal vector bisects the first quadrant,
-pointing to the top right corner of the board. Q2 points to the top left, Q3 points to the bottom
-left, and Q4 points to the bottom right.
+The player pieces are single-sided mirrors, and are named for the Cartesian quadrant in which their
+normal vectors point. For example, Q1 is a mirror that is oriented at a 45 degree angle with respect
+to the base of the board. Its normal vector bisects the first quadrant, pointing to the top right
+corner of the board. Q2 points to the top left, Q3 points to the bottom left, and Q4 points to the
+bottom right.
 
 Note the row and column indices are zero based, with r0c0 corresponding to the top left corner of
 the board. r1c2 is the entry two columns to the right and 1 row down from r0c0.
