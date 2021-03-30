@@ -81,12 +81,12 @@ PuzzleBoard::PrintBoard() {
 
   for (auto &p : PlayerPieces) {
     auto pos = p.second.GetPosition();
-    board[pos.first][pos.second] = PuzzlePiece::OrientationToPlayerPieceName[p.second.GetOrientation()];
+    board[pos.first][pos.second] = PuzzlePiece::OrientationToPlayerPieceName[p.first];
   }
 
   for (auto &p : ComputerPieces) {
     auto pos = p.second.GetPosition();
-    board[pos.first][pos.second] = PuzzlePiece::OrientationToComputerPieceName[p.second.GetOrientation()];
+    board[pos.first][pos.second] = PuzzlePiece::OrientationToComputerPieceName[p.first];
   }
 
   for (auto &p : InertPieces) {

@@ -6,7 +6,7 @@ std::unordered_map<Orientation, std::string> PuzzlePiece::OrientationToPlayerPie
 std::unordered_map<std::string, Orientation> PuzzlePiece::PlayerPieceNameToOrientation{{"Q1", Orientation::Q1}, {"Q2", Orientation::Q2}, {"Q3", Orientation::Q3}, {"Q4", Orientation::Q4}};
 
 std::unordered_map<Orientation, std::string> PuzzlePiece::OrientationToComputerPieceName{
-    {Orientation::Q1, "q1"}, {Orientation::Q2, "q2"}, {Orientation::Q3, "q3"}, {Orientation::Q4, "q4"}};
+    {Orientation::q1, "q1"}, {Orientation::q2, "q2"}, {Orientation::q3, "q3"}, {Orientation::q4, "q4"}};
 std::unordered_map<std::string, Orientation> PuzzlePiece::ComputerNameToOrientation{
     {"q1", Orientation::Q1}, {"q2", Orientation::Q2}, {"q3", Orientation::Q3}, {"q4", Orientation::Q4}};
 
