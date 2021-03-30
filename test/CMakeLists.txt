@@ -6,4 +6,5 @@ target_include_directories(puzzle-test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 target_link_libraries(puzzle-test
   puzzle-game
   gtest
-  gtest_main)
+  gtest_main
+  pthread)
