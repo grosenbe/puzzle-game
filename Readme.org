@@ -13,11 +13,9 @@ the board. r1c2 is the entry two columns to the right and 1 row down from r0c0.
 
 ** Prerequisites
    - gtest and gtest_main (available in most Linux distros)
-   - gtest_main
    - ninja (preferred) or make
 ** To build on Linux
-   See the ci_build shell script. Valgrind is used to profile memory usage.
+   See the ci_build shell script.
 ** To build on Windows
    Haven't tested this repo yet, but since we're using cmake, it should be possible to download the
-   Windows cmake generator to create Visual Studio solutions. Alternatively, it's probably also
-   possible to build this in WSL.
+   Windows cmake generator to create Visual Studio solutions.

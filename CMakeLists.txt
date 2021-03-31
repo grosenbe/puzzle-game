@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.7.0)
-set(CMAKE_CXX_FLAGS "-Wall -glldb")
+add_compile_options(-Wall -Wextra -Wpedantic -Werror -glldb)
 set(CMAKE_CXX_STANDARD 11)
 
 project(puzzle-game)

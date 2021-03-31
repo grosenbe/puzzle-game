@@ -68,7 +68,7 @@ PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const
 void
 PuzzleBoard::PrintBoard() {
   vector<vector<std::string>> board;
-  for (auto s = 0; s < BoardSize; ++s) {
+  for (auto s = 0u; s < BoardSize; ++s) {
     board.push_back(vector<std::string>(BoardSize, " __ "));
   }
 

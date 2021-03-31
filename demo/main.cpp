@@ -4,6 +4,8 @@
 #include "src/PuzzleBoard.h"
 #include "src/PuzzlePiece.h"
 
+using std::vector;
+
 using namespace PuzzleGame;
 
 void
@@ -56,8 +58,8 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
 }
 
 int
-main(int argc, char** argv) {
-  std::vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q1"), PuzzlePiece({3, 1}, "Q2"), PuzzlePiece({3, 2}, "Q3")};
+main(int argc __attribute__((unused)), char** argv __attribute__((unused))) {
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q1"), PuzzlePiece({3, 1}, "Q2"), PuzzlePiece({3, 2}, "Q3")};
   std::vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q1"), PuzzlePiece({0, 1}, "q2"), PuzzlePiece({0, 2}, "q3")};
   std::vector<PuzzlePiece> inert_pieces{PuzzlePiece({1, 1}, "X")};
   std::vector<PuzzlePiece> sinks{PuzzlePiece({2, 2}, "s")};
