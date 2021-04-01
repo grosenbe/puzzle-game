@@ -278,15 +278,20 @@ PuzzleBoard::CheckPuzzleCompletion() {
 
     // it's possible to have two player pieces directly next to each other, so the beam reflects
     // from one player piece directly into another
-    for (auto &pl : PlayerPieces) {
+    bool reflected = true;  // reflected directly onto another player piece
+    while (reflected) {
+      reflected = false;
       auto originalNextPosition = potentialNextPosition;
-      bool cont = true;
-      while (pl.second.GetPosition() == potentialNextPosition && cont) {
-        // hit a player piece.
-        UpdateBeamDirectionAndPosition(currentBeamDirection, potentialNextPosition, pl.second);
-        if (potentialNextPosition == originalNextPosition) {
-          cont = false;  // this happens if we hit the back of a player piece
-          finished = true;
+      for (auto &pl : PlayerPieces) {
+        if (pl.second.GetPosition() == potentialNextPosition) {
+          //hit a player piece
+          reflected = true;
+          UpdateBeamDirectionAndPosition(currentBeamDirection, potentialNextPosition, pl.second);
+          if (potentialNextPosition == originalNextPosition) {
+            finished = true;  // this happens if we hit the back of a player piece
+            reflected = false;
+            break;
+          }
         }
       }
     }

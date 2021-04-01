@@ -163,3 +163,19 @@ TEST(PuzzleTest, AdjacentPieces) {
   PuzzleBoard board(3, player_pieces, computer_pieces, vector<PuzzlePiece>(), sinks);
   EXPECT_TRUE(board.CheckPuzzleCompletion());
 }
+
+TEST(PuzzleTest, EdgeOfBoard) {
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({2, 2}, "Q2")};
+  vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q2")};
+  vector<PuzzlePiece> sinks{PuzzlePiece({1, 1}, "s")};
+  PuzzleBoard board(3, player_pieces, computer_pieces, vector<PuzzlePiece>(), sinks);
+  EXPECT_FALSE(board.CheckPuzzleCompletion());
+}
+
+TEST(PuzzleTest, BeamStartsOutOnPiece) {
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({2, 0}, "Q2")};
+  vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q2")};
+  vector<PuzzlePiece> sinks{PuzzlePiece({1, 0}, "s")};
+  PuzzleBoard board(3, player_pieces, computer_pieces, vector<PuzzlePiece>(), sinks);
+  EXPECT_TRUE(board.CheckPuzzleCompletion());
+}

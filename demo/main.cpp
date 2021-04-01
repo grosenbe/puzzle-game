@@ -25,8 +25,8 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
     cout << "3. Q3" << endl;
 
     int userInput;
-    std::cin >> userInput;
-    if (std::cin.fail()) {
+    cin >> userInput;
+    if (cin.fail()) {
       cin.clear();
       cin.ignore();
       continue;
@@ -58,8 +58,19 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
     int32_t userRow, userCol;
     cout << "Enter new row: ";
     cin >> userRow;
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      continue;
+    }
+
     cout << "Enter new column: ";
     cin >> userCol;
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      continue;
+    }
 
     if (userRow >= 0 && static_cast<uint32_t>(userRow) < Board->GetSize() && userCol >= 0 && static_cast<uint32_t>(userCol) < Board->GetSize()) {
       position.first = userRow;
@@ -71,12 +82,12 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
 
 int
 main(int argc __attribute__((unused)), char** argv __attribute__((unused))) {
-  vector<PuzzlePiece> player_pieces{PuzzlePiece({2, 0}, "Q1"), PuzzlePiece({4, 4}, "Q2"), PuzzlePiece({3, 4}, "Q3")};
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q1"), PuzzlePiece({3, 1}, "Q2"), PuzzlePiece({3, 2}, "Q3")};
   std::vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q1"), PuzzlePiece({0, 1}, "q2"), PuzzlePiece({0, 2}, "q3")};
   std::vector<PuzzlePiece> inert_pieces{PuzzlePiece({1, 1}, "X")};
-  std::vector<PuzzlePiece> sinks{PuzzlePiece({3, 0}, "s")};
+  std::vector<PuzzlePiece> sinks{PuzzlePiece({1, 2}, "s")};
 
-  Board = std::unique_ptr<PuzzleBoard>(new PuzzleBoard(5, player_pieces, computer_pieces, inert_pieces, sinks));
+  Board = std::unique_ptr<PuzzleBoard>(new PuzzleBoard(4, player_pieces, computer_pieces, inert_pieces, sinks));
 
   while (!Board->CheckPuzzleCompletion()) {
     Board->PrintBoard();
