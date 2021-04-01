@@ -7,9 +7,11 @@
 
 #include "PuzzlePiece.h"
 
+using std::string;
 using std::vector;
-
 using namespace PuzzleGame;
+
+const size_t PuzzleBoard::SQUARE_WIDTH = 3;
 
 PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const vector<PuzzlePiece> &computer, const vector<PuzzlePiece> &inert, const vector<PuzzlePiece> &sinks) : BoardSize(size) {
   if (computer.size() != player.size())
@@ -60,16 +62,79 @@ PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const
       Sinks.insert({sy.GetName(), sy});
       OccupiedPositions.insert(sy.GetPosition());
     } else {
-      throw std::runtime_error("Sync placed outside board");
+      throw std::runtime_error("Sink placed outside board");
     }
   }
 }
 
 void
+PuzzleBoard::PrintFillerRow() {
+  std::cout << "   +";
+  for (size_t c = 0; c < BoardSize; ++c) {
+    for (size_t ch = 0; ch < PuzzleBoard::SQUARE_WIDTH; ++ch)
+      std::cout << "-";
+    std::cout << "+";
+  }
+  std::cout << std::endl;
+}
+
+void
+PuzzleBoard::PrintColumnHeaders() {
+  string leftPadding((SQUARE_WIDTH - 2u) / 2 + 1, ' ');
+  string rightPadding((SQUARE_WIDTH - 2u) / 2 + 1, ' ');
+  std::cout << "   ";
+  for (auto c = 0u; c < BoardSize; ++c) {
+    std::cout << leftPadding << "C" << c << rightPadding;
+  }
+  std::cout << std::endl;
+}
+
+void
+PuzzleBoard::PrintContentRow(const std::vector<std::string> &row, size_t rowNum) {
+  for (auto c = 0u; c < row.size(); ++c) {
+    if (c == 0)
+      std::cout << "R" << rowNum << " |";
+    const auto &str = row[c];
+    std::string outStr(PuzzleBoard::SQUARE_WIDTH, ' ');
+    if (str.size() == 1) {
+      if (PuzzleBoard::SQUARE_WIDTH % 2u)
+        outStr[PuzzleBoard::SQUARE_WIDTH / 2u] = str[0];
+      else
+        outStr[PuzzleBoard::SQUARE_WIDTH / 2u - 1] = str[0];
+
+    } else if (str.size() == 2) {
+      if (PuzzleBoard::SQUARE_WIDTH % 2u) {
+        outStr[PuzzleBoard::SQUARE_WIDTH / 2u - 1] = str[0];
+        outStr[PuzzleBoard::SQUARE_WIDTH / 2u + 1] = str[1];
+      } else {
+        outStr[PuzzleBoard::SQUARE_WIDTH / 2u] = str[0];
+        outStr[PuzzleBoard::SQUARE_WIDTH / 2u + 1] = str[1];
+      }
+    }
+    std::cout << outStr << "|";
+  }
+  std::cout << std::endl;
+}
+
+// Example board:
+//       C0    C1    C2    C3    C4
+//    +-----+-----+-----+-----+-----+
+// R0 | q 1 | q 2 | q 3 | q 4 |     |
+//    +-----+-----+-----+-----+-----+
+// R1 |     |  X  |     |     |     |
+//    +-----+-----+-----+-----+-----+
+// R2 |     |     |  s  |     |     |
+//    +-----+-----+-----+-----+-----+
+// R3 |     |     |     |     |     |
+//    +-----+-----+-----+-----+-----+
+// R4 |     | Q 1 | Q 2 | Q 3 | Q 4 |
+//    +-----+-----+-----+-----+-----+
+//
+void
 PuzzleBoard::PrintBoard() {
-  vector<vector<std::string>> board;
-  for (auto s = 0; s < BoardSize; ++s) {
-    board.push_back(vector<std::string>(BoardSize, " __ "));
+  vector<vector<string>> board;
+  for (auto s = 0u; s < BoardSize; ++s) {
+    board.push_back(vector<string>(BoardSize, ""));
   }
 
   for (auto &p : PlayerPieces) {
@@ -92,10 +157,11 @@ PuzzleBoard::PrintBoard() {
     board[pos.first][pos.second] = sn.first;
   }
 
-  for (auto &l : board) {
-    for (auto &s : l)
-      std::cout << " " << s << " ";
-    std::cout << std::endl;
+  PrintColumnHeaders();
+  PrintFillerRow();
+  for (size_t r = 0; r < BoardSize; ++r) {
+    PrintContentRow(board[r], r);
+    PrintFillerRow();
   }
 }
 
@@ -212,15 +278,20 @@ PuzzleBoard::CheckPuzzleCompletion() {
 
     // it's possible to have two player pieces directly next to each other, so the beam reflects
     // from one player piece directly into another
-    for (auto &pl : PlayerPieces) {
+    bool reflected = true;  // reflected directly onto another player piece
+    while (reflected) {
+      reflected = false;
       auto originalNextPosition = potentialNextPosition;
-      bool cont = true;
-      while (pl.second.GetPosition() == potentialNextPosition && cont) {
-        // hit a player piece.
-        UpdateBeamDirectionAndPosition(currentBeamDirection, potentialNextPosition, pl.second);
-        if (potentialNextPosition == originalNextPosition) {
-          cont = false;  // this happens if we hit the back of a player piece
-          finished = true;
+      for (auto &pl : PlayerPieces) {
+        if (pl.second.GetPosition() == potentialNextPosition) {
+          //hit a player piece
+          reflected = true;
+          UpdateBeamDirectionAndPosition(currentBeamDirection, potentialNextPosition, pl.second);
+          if (potentialNextPosition == originalNextPosition) {
+            finished = true;  // this happens if we hit the back of a player piece
+            reflected = false;
+            break;
+          }
         }
       }
     }

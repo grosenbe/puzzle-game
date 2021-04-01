@@ -42,6 +42,11 @@ class PuzzleBoard {
   std::unordered_map<Orientation, PuzzlePiece> ComputerPieces;
   std::unordered_map<std::string, PuzzlePiece> InertPieces;
   std::unordered_map<std::string, PuzzlePiece> Sinks;
+
+  static const size_t SQUARE_WIDTH;
+  void PrintColumnHeaders();
+  void PrintFillerRow();
+  void PrintContentRow(const std::vector<std::string> &, const size_t);
 };
 };  // namespace PuzzleGame
 
