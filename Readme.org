@@ -16,6 +16,7 @@ pieces. Pieces called "X" are inert blockers, and the piece marked s is the targ
 The light beam comes in from the bottom left square of the board (R3C0 below) and can be reflected
 to hit the target. The demo configuration below shows a winning board.
 
+#+BEGIN_EXAMPLE
     C0  C1  C2  C3
    +---+---+---+---+
 R0 |   |q 2|   |   |
@@ -26,7 +27,7 @@ R2 |Q 1|   |   |   |
    +---+---+---+---+
 R3 |   |   |Q 2|   |
    +---+---+---+---+
-
+#+END_EXAMPLE
 ** Prerequisites
    - gtest and gtest_main (available in most Linux distros)
    - ninja (preferred) or make
