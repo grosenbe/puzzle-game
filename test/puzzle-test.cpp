@@ -155,3 +155,11 @@ TEST(PuzzleTest, CantMoveComputerPieceOffBoard) {
   EXPECT_EQ(board.GetComputerPiece(Orientation::q1).GetPosition().first, 0);
   EXPECT_EQ(board.GetComputerPiece(Orientation::q1).GetPosition().second, 0);
 }
+
+TEST(PuzzleTest, AdjacentPieces) {
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({2, 2}, "Q2"), PuzzlePiece({1, 2}, "Q3")};
+  vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q2"), PuzzlePiece({0, 1}, "q3")};
+  vector<PuzzlePiece> sinks{PuzzlePiece({1, 1}, "s")};
+  PuzzleBoard board(3, player_pieces, computer_pieces, vector<PuzzlePiece>(), sinks);
+  EXPECT_TRUE(board.CheckPuzzleCompletion());
+}
