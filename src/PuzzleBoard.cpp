@@ -55,6 +55,9 @@ PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const
     }
   }
 
+  if (sinks.empty())
+    throw std::runtime_error("Cannot create a board without any sinks");
+
   for (const auto &sy : sinks) {
     if (sy.GetPosition().first < BoardSize && sy.GetPosition().second < BoardSize) {
       if (OccupiedPositions.find(sy.GetPosition()) != OccupiedPositions.end())
@@ -169,7 +172,7 @@ bool
 PuzzleBoard::PlayerMove(const std::string &pieceName, std::pair<uint32_t, uint32_t> newPosition) {
   auto it = PlayerPieces.find(PuzzlePiece::PlayerPieceNameToOrientation[pieceName]);
   if (it == PlayerPieces.end()) {
-    throw std::runtime_error("Cannot move player piece " + pieceName + " because it does not exist.");
+    throw std::runtime_error("Cannot move player piece " + pieceName + " because it does not exist");
   }
 
   auto currentPosition = it->second.GetPosition();
@@ -393,7 +396,7 @@ const PuzzlePiece &
 PuzzleBoard::GetPlayerPiece(const Orientation &orientation) {
   auto it = PlayerPieces.find(orientation);
   if (it == PlayerPieces.end()) {
-    throw std::runtime_error("No such player piece on the board.");
+    throw std::runtime_error("No such player piece on the board");
   }
   return it->second;
 }
@@ -402,7 +405,7 @@ const PuzzlePiece &
 PuzzleBoard::GetComputerPiece(const Orientation &orientation) {
   auto it = ComputerPieces.find(orientation);
   if (it == ComputerPieces.end()) {
-    throw std::runtime_error("No such computer piece on the board.");
+    throw std::runtime_error("No such computer piece on the board");
   }
   return it->second;
 }
@@ -411,7 +414,7 @@ const PuzzlePiece &
 PuzzleBoard::GetInertPiece(const std::string &name) {
   auto it = InertPieces.find(name);
   if (it == InertPieces.end()) {
-    throw std::runtime_error("No such inert piece on the board.");
+    throw std::runtime_error("No such inert piece on the board");
   }
   return it->second;
 }
@@ -420,7 +423,7 @@ const PuzzlePiece &
 PuzzleBoard::GetSink(const std::string &name) {
   auto it = Sinks.find(name);
   if (it == Sinks.end()) {
-    throw std::runtime_error("No such sink on the board.");
+    throw std::runtime_error("No such sink on the board");
   }
   return it->second;
 }

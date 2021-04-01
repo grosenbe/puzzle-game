@@ -179,3 +179,18 @@ TEST(PuzzleTest, BeamStartsOutOnPiece) {
   PuzzleBoard board(3, player_pieces, computer_pieces, vector<PuzzlePiece>(), sinks);
   EXPECT_TRUE(board.CheckPuzzleCompletion());
 }
+
+TEST(PuzzleTest, TripleReflectionWorks) {
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q2"), PuzzlePiece({0, 0}, "Q4"), PuzzlePiece({0, 2}, "Q3")};
+  vector<PuzzlePiece> computer_pieces{PuzzlePiece({3, 1}, "q2"), PuzzlePiece({3, 2}, "q4"), PuzzlePiece({2, 1}, "q3")};
+  vector<PuzzlePiece> sinks{PuzzlePiece({1, 2}, "s")};
+  PuzzleBoard board(4, player_pieces, computer_pieces, vector<PuzzlePiece>(), sinks);
+  EXPECT_TRUE(board.CheckPuzzleCompletion());
+}
+
+TEST(PuzzleTest, ThowWhenCreatingBoardWithNoSink) {
+  vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q2"), PuzzlePiece({0, 0}, "Q4"), PuzzlePiece({0, 2}, "Q3")};
+  vector<PuzzlePiece> computer_pieces{PuzzlePiece({3, 1}, "q2"), PuzzlePiece({3, 2}, "q4"), PuzzlePiece({2, 1}, "q3")};
+
+  EXPECT_THROW(PuzzleBoard board(4, player_pieces, computer_pieces, vector<PuzzlePiece>(), vector<PuzzlePiece>()), std::runtime_error);
+}
