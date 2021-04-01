@@ -9,7 +9,23 @@ corner of the board. Q2 points to the top left, Q3 points to the bottom left, an
 bottom right.
 
 Note the row and column indices are zero based, with r0c0 corresponding to the top left corner of
-the board. r1c2 is the entry two columns to the right and 1 row down from r0c0.
+the board. r1c2 is the entry two columns to the right and 1 row down from r0c0. Pieces beginning
+with capital letters are player pieces, pieces beginning with lower case letters are computer
+pieces. Pieces called "X" are inert blockers, and the piece marked s is the target.
+
+The light beam comes in from the bottom left square of the board (R3C0 below) and can be reflected
+to hit the target. The demo configuration below shows a winning board.
+
+    C0  C1  C2  C3
+   +---+---+---+---+
+R0 |   |q 2|   |   |
+   +---+---+---+---+
+R1 |q 1| X | s |   |
+   +---+---+---+---+
+R2 |Q 1|   |   |   |
+   +---+---+---+---+
+R3 |   |   |Q 2|   |
+   +---+---+---+---+
 
 ** Prerequisites
    - gtest and gtest_main (available in most Linux distros)
