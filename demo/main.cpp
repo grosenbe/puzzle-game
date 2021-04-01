@@ -37,7 +37,7 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
         selectionValidated = true;
         break;
       default:
-        std::cerr << "Invalid input: " << userInput << std::endl;
+        std::cout << "Invalid input: " << userInput << std::endl;
     }
   }
 
@@ -75,10 +75,10 @@ main(int argc __attribute__((unused)), char** argv __attribute__((unused))) {
     try {
       Board->PlayerMove(pieceToMove, requestedPosition);
     } catch (std::runtime_error& e) {
-      std::cerr << "Caught runtime exception: " << e.what() << std::endl;
+      std::cout << "Caught runtime exception: " << e.what() << std::endl;
     }
   }
 
   Board->PrintBoard();
-  std::cerr << "You win!" << std::endl;
+  std::cout << "You win!" << std::endl;
 }
