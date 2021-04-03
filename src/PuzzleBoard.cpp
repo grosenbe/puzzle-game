@@ -1,7 +1,5 @@
 #include "PuzzleBoard.h"
 
-#include <bits/stdint-uintn.h>
-
 #include <cmath>
 #include <fstream>
 #include <iostream>
