@@ -13,6 +13,14 @@
 using std::string;
 using std::vector;
 
+// directions the beam can be traveling
+enum class Direction : char {
+  Up,
+  Down,
+  Left,
+  Right
+};
+
 namespace PuzzleGame {
 class PuzzleBoard {
  public:
@@ -57,6 +65,6 @@ class PuzzleBoard {
   void PrintFillerRow() const;
   void PrintContentRow(const std::vector<std::string> &, const size_t) const;
 };
-};  // namespace PuzzleGame
+}  // namespace PuzzleGame
 
 #endif
