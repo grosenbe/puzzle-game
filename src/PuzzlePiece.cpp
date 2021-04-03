@@ -16,49 +16,49 @@ std::unordered_map<Orientation, Orientation> PuzzlePiece::ComputerOrientationToP
 std::unordered_map<Orientation, Orientation> PuzzlePiece::PlayerOrientationToComputerOrientation{
     {Orientation::Q1, Orientation::q1}, {Orientation::Q2, Orientation::q2}, {Orientation::Q3, Orientation::q3}, {Orientation::Q4, Orientation::q4}};
 
-PuzzlePiece::PuzzlePiece(std::pair<uint32_t, uint32_t> position, std::string orientation) : Position{position} {
-  Name = orientation;
+PuzzlePiece::PuzzlePiece(std::pair<uint32_t, uint32_t> position, std::string orientation) : MyPosition{position} {
+  MyName = orientation;
 
   if (orientation == "Q1")
-    Orientation = Orientation::Q1;
+    MyOrientation = Orientation::Q1;
   else if (orientation == "q1")
-    Orientation = Orientation::q1;
+    MyOrientation = Orientation::q1;
 
   else if (orientation == "Q2")
-    Orientation = Orientation::Q2;
+    MyOrientation = Orientation::Q2;
   else if (orientation == "q2")
-    Orientation = Orientation::q2;
+    MyOrientation = Orientation::q2;
 
   else if (orientation == "Q3")
-    Orientation = Orientation::Q3;
+    MyOrientation = Orientation::Q3;
   else if (orientation == "q3")
-    Orientation = Orientation::q3;
+    MyOrientation = Orientation::q3;
 
   else if (orientation == "Q4")
-    Orientation = Orientation::Q4;
+    MyOrientation = Orientation::Q4;
   else if (orientation == "q4")
-    Orientation = Orientation::q4;
+    MyOrientation = Orientation::q4;
 
   else if (orientation == "X")
-    Orientation = Orientation::X;
+    MyOrientation = Orientation::X;
   else if (orientation == "s")
-    Orientation = Orientation::S;
+    MyOrientation = Orientation::S;
 }
 
 const std::string&
 PuzzlePiece::GetName() const {
-  return Name;
+  return MyName;
 }
 
 const std::pair<uint32_t, uint32_t>&
 PuzzlePiece::GetPosition() const {
-  return Position;
+  return MyPosition;
 }
 
 const ::Orientation&
-PuzzlePiece::GetOrientation() const { return Orientation; }
+PuzzlePiece::GetOrientation() const { return MyOrientation; }
 
 void
 PuzzlePiece::SetPosition(std::pair<uint32_t, uint32_t> newPosition) {
-  Position = newPosition;
+  MyPosition = newPosition;
 }

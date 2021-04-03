@@ -41,18 +41,9 @@ class PuzzlePiece {
   static std::unordered_map<Orientation, Orientation> PlayerOrientationToComputerOrientation;
 
  private:
-  std::pair<uint32_t, uint32_t> Position;
-  Orientation Orientation;
-  std::string Name;
+  std::pair<uint32_t, uint32_t> MyPosition;
+  Orientation MyOrientation;
+  std::string MyName;
 };
-
-// directions the beam can be traveling
-enum class Direction : char {
-  Up,
-  Down,
-  Left,
-  Right
-};
-
-};  // namespace PuzzleGame
+}  // namespace PuzzleGame
 #endif

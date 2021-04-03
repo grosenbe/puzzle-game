@@ -158,11 +158,12 @@ PuzzleBoard::Init(uint32_t size, const vector<PuzzlePiece> &player, const vector
     }
   }
 
-  // TODO: ensure that sync and inert names are unique
   for (const auto &in : inert) {
     if (in.GetPosition().first < BoardSize && in.GetPosition().second < BoardSize) {
       if (OccupiedPositions.find(in.GetPosition()) != OccupiedPositions.end())
         throw std::runtime_error("Error: Stacked pieces");
+      if (InertPieces.find(in.GetName()) != InertPieces.end())
+        throw std::runtime_error("Board already contains an inert piece called " + in.GetName());
       InertPieces.insert({in.GetName(), in});
       OccupiedPositions.insert(in.GetPosition());
     } else {
@@ -177,6 +178,8 @@ PuzzleBoard::Init(uint32_t size, const vector<PuzzlePiece> &player, const vector
     if (sy.GetPosition().first < BoardSize && sy.GetPosition().second < BoardSize) {
       if (OccupiedPositions.find(sy.GetPosition()) != OccupiedPositions.end())
         throw std::runtime_error("Error: Stacked pieces");
+      if (InertPieces.find(sy.GetName()) != Sinks.end())
+        throw std::runtime_error("Board already contains a sink called " + sy.GetName());
       Sinks.insert({sy.GetName(), sy});
       OccupiedPositions.insert(sy.GetPosition());
     } else {
