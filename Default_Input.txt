@@ -5,18 +5,19 @@
 # Board size
 Size 4
 
-# Player pieces (row, column)
+# Player pieces (row, column).
+# (Duplicate pieces are not allowed.)
 PP Q1 3,0
 PP Q2 3,1
 PP Q3 3,2
 
-# Sinks
+# Sinks (Multiple sinks are allowed, provided they are uniquely named).
 sink s 1,2
 
-# inert pieces
+# Inert pieces (Like sinks, these must be uniquely named).
 inert X 1,1
 
-# Computer pieces
+# Computer pieces (Each player piece must have a corresponding lowercase computer piece).
 CP q1 0,0
 CP q2 0,1
 CP q3 0,2

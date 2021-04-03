@@ -1,4 +1,5 @@
 * Puzzle Game
+** Summary
 Player moves pieces within constraints, board matches the moves. This repo contains a library
 (puzzle-game) and a very basic demo to print the board, as well as a unit test suite.
 
@@ -28,11 +29,21 @@ R2 |Q 1|   |   |   |
 R3 |   |   |Q 2|   |
    +---+---+---+---+
 #+END_EXAMPLE
-** Prerequisites
-   - gtest and gtest_main (available in most Linux distros)
-   - ninja (preferred) or make
-** To build on Linux
-   See the ci_build shell script.
-** To build on Windows
-   Haven't tested this repo yet, but since we're using cmake, it should be possible to download the
-   Windows cmake generator to create Visual Studio solutions.
+** Command Line Arguments
+There are currently only two command line arguments in the demo application: 
+ - -h (Displays the help information)
+ - -f <file> (takes a path to a board description file)
+
+The Default_Input.txt file in the base directory can be used as an example for the syntax.
+
+In the absence of command line arguments, the application will use a default board configuration.
+** Building
+*** Prerequisites to Build
+    - gtest and gtest_main (available in most Linux distros)
+    - ninja (preferred) or make
+    - A C++ compiler. This has been tested with clang 11.1.0, clang 3.8.1, g++ 10.2.0, and g++ 
+*** To build on Linux
+    See the ci_build shell script.
+*** To build on Windows
+    Haven't tested this repo yet, but since we're using cmake, it should be possible to download the
+    Windows cmake generator to create Visual Studio solutions.
