@@ -72,6 +72,10 @@ TEST_F(PuzzleTestFixture, CannotMovePieceOnTopOfAnother) {
   EXPECT_FALSE(Board.PlayerMove("Q1", {1, 1}));  // hits X
 }
 
+TEST_F(PuzzleTestFixture, CannotMoveComputerPiece) {
+  EXPECT_THROW(Board.PlayerMove("q1", {1, 0}), std::runtime_error);
+}
+
 TEST_F(PuzzleTestFixture, LegalMoveUpdatesOccupiedPositionsAndSetsNewPosition) {
   EXPECT_TRUE(Board.OccupiedPositions.find({2, 0}) == Board.OccupiedPositions.end());
   EXPECT_EQ(Board.GetPlayerPiece(Orientation::Q1).GetPosition().first, 3);
@@ -90,18 +94,20 @@ TEST_F(PuzzleTestFixture, LegalMoveUpdatesOccupiedPositionsAndSetsNewPosition) {
   EXPECT_EQ(Board.GetComputerPiece(Orientation::q1).GetPosition().second, 0);
 }
 
+TEST(PuzzleTest, RequirePlayerPiecesAndSinks) {
+  EXPECT_THROW(PuzzleBoard(2, {PuzzlePiece({0, 0}, "Q1")}, {PuzzlePiece({1, 0}, "q1")}, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}), std::runtime_error);
+  EXPECT_THROW(PuzzleBoard(2, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}, {PuzzlePiece({1, 1}, "s")}), std::runtime_error);
+}
+
 TEST(PuzzleTest, CheckCompletionReturnsAppropriately) {
-  PuzzleBoard board(2, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}, {PuzzlePiece({1, 1}, "s")});
-  EXPECT_TRUE(board.CheckPuzzleCompletion());
+  PuzzleBoard board1(2, {PuzzlePiece({1, 1}, "Q2")}, {PuzzlePiece({0, 0}, "q2")}, vector<PuzzlePiece>{}, {PuzzlePiece({0, 1}, "s")});
+  EXPECT_TRUE(board1.CheckPuzzleCompletion());
 
-  PuzzleBoard board2(2, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}, vector<PuzzlePiece>{}, {PuzzlePiece({0, 1}, "s")});
-  EXPECT_FALSE(board2.CheckPuzzleCompletion());
+  PuzzleBoard board2(3, {PuzzlePiece({2, 0}, "Q2"), PuzzlePiece({0, 0}, "Q4")}, {PuzzlePiece({1, 1}, "q2"), PuzzlePiece({2, 2}, "q4")}, vector<PuzzlePiece>{}, {PuzzlePiece({0, 2}, "s")});
+  EXPECT_TRUE(board2.CheckPuzzleCompletion());
 
-  PuzzleBoard board3(2, {PuzzlePiece({1, 1}, "Q2")}, {PuzzlePiece({0, 0}, "q2")}, vector<PuzzlePiece>{}, {PuzzlePiece({0, 1}, "s")});
-  EXPECT_TRUE(board3.CheckPuzzleCompletion());
-
-  PuzzleBoard board4(3, {PuzzlePiece({2, 0}, "Q2"), PuzzlePiece({0, 0}, "Q4")}, {PuzzlePiece({1, 1}, "q2"), PuzzlePiece({2, 2}, "q4")}, vector<PuzzlePiece>{}, {PuzzlePiece({0, 2}, "s")});
-  EXPECT_TRUE(board4.CheckPuzzleCompletion());
+  PuzzleBoard board3(2, {PuzzlePiece({1, 0}, "Q4")}, {PuzzlePiece({0, 0}, "q4")}, vector<PuzzlePiece>{}, {PuzzlePiece({1, 1}, "s")});
+  EXPECT_FALSE(board3.CheckPuzzleCompletion());
 }
 
 TEST(PuzzleTest, CannotPlacePiecesOutsideBoard) {
@@ -193,4 +199,39 @@ TEST(PuzzleTest, ThowWhenCreatingBoardWithNoSink) {
   vector<PuzzlePiece> computer_pieces{PuzzlePiece({3, 1}, "q2"), PuzzlePiece({3, 2}, "q4"), PuzzlePiece({2, 1}, "q3")};
 
   EXPECT_THROW(PuzzleBoard board(4, player_pieces, computer_pieces, vector<PuzzlePiece>(), vector<PuzzlePiece>()), std::runtime_error);
+}
+
+TEST(PuzzleTest, ConstructBoardFromInputFile) {
+  EXPECT_THROW(PuzzleBoard("/does/not/exist"), std::runtime_error);
+
+  PuzzleBoard board("../test/test_input_files/test_input.txt");
+  EXPECT_EQ(board.GetPlayerPiece(Orientation::Q1).GetPosition().first, 3);
+  EXPECT_EQ(board.GetPlayerPiece(Orientation::Q1).GetPosition().second, 0);
+
+  EXPECT_EQ(board.GetPlayerPiece(Orientation::Q2).GetPosition().first, 3);
+  EXPECT_EQ(board.GetPlayerPiece(Orientation::Q2).GetPosition().second, 1);
+
+  EXPECT_EQ(board.GetPlayerPiece(Orientation::Q3).GetPosition().first, 3);
+  EXPECT_EQ(board.GetPlayerPiece(Orientation::Q3).GetPosition().second, 2);
+
+  EXPECT_EQ(board.GetSink("s").GetPosition().first, 1);
+  EXPECT_EQ(board.GetSink("s").GetPosition().second, 2);
+
+  EXPECT_EQ(board.GetInertPiece("X").GetPosition().first, 1);
+  EXPECT_EQ(board.GetInertPiece("X").GetPosition().second, 1);
+
+  EXPECT_EQ(board.GetComputerPiece(Orientation::q1).GetPosition().first, 0);
+  EXPECT_EQ(board.GetComputerPiece(Orientation::q1).GetPosition().second, 0);
+
+  EXPECT_EQ(board.GetComputerPiece(Orientation::q2).GetPosition().first, 0);
+  EXPECT_EQ(board.GetComputerPiece(Orientation::q2).GetPosition().second, 1);
+
+  EXPECT_EQ(board.GetComputerPiece(Orientation::q3).GetPosition().first, 0);
+  EXPECT_EQ(board.GetComputerPiece(Orientation::q3).GetPosition().second, 2);
+}
+
+TEST(PuzzleTest, ThrowOnBadInputFiles) {
+  EXPECT_THROW(PuzzleBoard("../test/test_input_files/misformatted.txt"), std::runtime_error);
+  EXPECT_THROW(PuzzleBoard("../test/test_input_files/misformatted2.txt"), std::runtime_error);
+  EXPECT_THROW(PuzzleBoard("../test/test_input_files/misformatted3.txt"), std::runtime_error);
 }

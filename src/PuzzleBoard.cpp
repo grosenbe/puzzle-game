@@ -1,19 +1,135 @@
 #include "PuzzleBoard.h"
 
+#include <bits/stdint-uintn.h>
+
 #include <cmath>
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
 #include "PuzzlePiece.h"
 
+using std::ifstream;
 using std::string;
+using std::unordered_set;
 using std::vector;
 using namespace PuzzleGame;
 
+enum class InputMode : char {
+  Size,
+  Player,
+  sink,
+  inert,
+  Computer
+};
+
 const size_t PuzzleBoard::SQUARE_WIDTH = 3;
 
-PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const vector<PuzzlePiece> &computer, const vector<PuzzlePiece> &inert, const vector<PuzzlePiece> &sinks) : BoardSize(size) {
+PuzzleBoard::PuzzleBoard(const std::string &inputFile) {
+  size_t size = 0;
+  vector<PuzzlePiece> inert, sinks, player, computer;
+
+  ifstream ifs{inputFile, std::ifstream::in};
+  if (!ifs.good())
+    throw std::runtime_error("Error: Input file " + inputFile + "doesn't exist");
+
+  string line;
+  while (std::getline(ifs, line)) {
+    if (line.size() == 0 || line[0] == ' ' || line[0] == '#')
+      continue;
+    string token;
+    std::stringstream ss(line);  // other delimiters?
+    size_t tokenCount = 0;
+    InputMode inputMode;
+    std::string pieceName;
+
+    while (ss >> token) {
+      switch (tokenCount) {
+        case 0:
+          // "Size, or sink, or inert, or PP, or CP
+          if (token.compare("Size") == 0)
+            inputMode = InputMode::Size;
+          else if (token.compare("PP") == 0)
+            inputMode = InputMode::Player;
+          else if (token.compare("sink"))
+            inputMode = InputMode::sink;
+          else if (token.compare("inert"))
+            inputMode = InputMode::inert;
+          else if (token.compare("Computer"))
+            inputMode = InputMode::Computer;
+          else
+            throw std::runtime_error("Unexpected token in input file");
+          break;
+
+        case 1: {
+          if (inputMode == InputMode::Size) {
+            try {
+              size = std::stoi(token);
+            } catch (...) {
+              string errMsg{"Expected a numeric value for size. Found " + token};
+            }
+          } else {
+            pieceName = token;
+          }
+        } break;
+
+        case 2: {
+          if (inputMode == InputMode::Size)
+            throw std::runtime_error("Too many tokens on the \"Size\" line");
+
+          auto ss3 = std::istringstream(token);
+          uint32_t row, column, coordCount = 0;
+          string coordinate;
+          while (std::getline(ss3, coordinate, ',')) {
+            try {
+              if (coordCount == 0)
+                row = std::stoi(coordinate);
+              else if (coordCount == 1)
+                column = std::stoi(coordinate);
+              else
+                throw std::runtime_error("Too many values for a row/column pair");
+            } catch (...) {
+              string errMsg{"Expected numeric values for row/column pair. Found " + coordinate};
+              throw std::runtime_error(errMsg);
+            }
+            ++coordCount;
+          }
+          PuzzlePiece piece({row, column}, pieceName);
+          if (pieceName[0] == 'Q')
+            player.push_back(PuzzlePiece(piece));
+          else if (pieceName[0] == 'q')
+            computer.push_back(piece);
+          else if (pieceName[0] == 'X')
+            inert.push_back(piece);
+          else if (pieceName[0] == 's')
+            sinks.push_back(piece);
+          else
+            throw std::runtime_error("Unexpected piece name");
+
+          break;
+        }
+        default:
+          throw std::runtime_error("Too many tokens");
+      }
+      ++tokenCount;
+    }
+  }
+
+  Init(size, player, computer, inert, sinks);
+}
+
+PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const vector<PuzzlePiece> &computer, const vector<PuzzlePiece> &inert, const vector<PuzzlePiece> &sinks) {
+  Init(size, player, computer, inert, sinks);
+}
+
+void
+PuzzleBoard::Init(uint32_t size, const vector<PuzzlePiece> &player, const vector<PuzzlePiece> &computer, const vector<PuzzlePiece> &inert, const vector<PuzzlePiece> &sinks) {
+  BoardSize = size;
+
+  if (player.empty())
+    throw std::runtime_error("No player pieces specified");
   if (computer.size() != player.size())
     throw std::runtime_error("Different number of player and computer pieces");
 
@@ -44,6 +160,7 @@ PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const
     }
   }
 
+  // TODO: ensure that sync and inert names are unique
   for (const auto &in : inert) {
     if (in.GetPosition().first < BoardSize && in.GetPosition().second < BoardSize) {
       if (OccupiedPositions.find(in.GetPosition()) != OccupiedPositions.end())
@@ -71,7 +188,7 @@ PuzzleBoard::PuzzleBoard(uint32_t size, const vector<PuzzlePiece> &player, const
 }
 
 void
-PuzzleBoard::PrintFillerRow() {
+PuzzleBoard::PrintFillerRow() const {
   std::cout << "   +";
   for (size_t c = 0; c < BoardSize; ++c) {
     for (size_t ch = 0; ch < PuzzleBoard::SQUARE_WIDTH; ++ch)
@@ -82,7 +199,7 @@ PuzzleBoard::PrintFillerRow() {
 }
 
 void
-PuzzleBoard::PrintColumnHeaders() {
+PuzzleBoard::PrintColumnHeaders() const {
   string leftPadding((SQUARE_WIDTH - 2u) / 2 + 1, ' ');
   string rightPadding((SQUARE_WIDTH - 2u) / 2 + 1, ' ');
   std::cout << "   ";
@@ -93,7 +210,7 @@ PuzzleBoard::PrintColumnHeaders() {
 }
 
 void
-PuzzleBoard::PrintContentRow(const std::vector<std::string> &row, size_t rowNum) {
+PuzzleBoard::PrintContentRow(const std::vector<std::string> &row, size_t rowNum) const {
   for (auto c = 0u; c < row.size(); ++c) {
     if (c == 0)
       std::cout << "R" << rowNum << " |";
@@ -134,7 +251,7 @@ PuzzleBoard::PrintContentRow(const std::vector<std::string> &row, size_t rowNum)
 //    +-----+-----+-----+-----+-----+
 //
 void
-PuzzleBoard::PrintBoard() {
+PuzzleBoard::PrintBoard() const {
   vector<vector<string>> board;
   for (auto s = 0u; s < BoardSize; ++s) {
     board.push_back(vector<string>(BoardSize, ""));
@@ -215,7 +332,7 @@ PuzzleBoard::PlayerMove(const std::string &pieceName, std::pair<uint32_t, uint32
 }
 
 bool
-PuzzleBoard::CheckPuzzleCompletion() {
+PuzzleBoard::CheckPuzzleCompletion() const {
   bool finished = false;
   bool puzzleComplete = false;
   auto currentBeamDirection = Direction::Right;
@@ -320,7 +437,7 @@ PuzzleBoard::CheckPuzzleCompletion() {
 }
 
 void
-PuzzleBoard::UpdateBeamDirectionAndPosition(Direction &beamDirection, std::pair<uint32_t, uint32_t> &beamPosition, const PuzzlePiece &piece) {
+PuzzleBoard::UpdateBeamDirectionAndPosition(Direction &beamDirection, std::pair<uint32_t, uint32_t> &beamPosition, const PuzzlePiece &piece) const {
   // calculate the new direction and position based on the old direction.
   switch (piece.GetOrientation()) {
     case PuzzleGame::Orientation::Q1:
@@ -373,22 +490,22 @@ PuzzleBoard::UpdateBeamDirectionAndPosition(Direction &beamDirection, std::pair<
 }
 
 size_t
-PuzzleBoard::GetNumComputerPieces() {
+PuzzleBoard::GetNumComputerPieces() const {
   return ComputerPieces.size();
 }
 
 size_t
-PuzzleBoard::GetNumPlayerPieces() {
+PuzzleBoard::GetNumPlayerPieces() const {
   return PlayerPieces.size();
 }
 
 size_t
-PuzzleBoard::GetNumInertPieces() {
+PuzzleBoard::GetNumInertPieces() const {
   return InertPieces.size();
 }
 
 size_t
-PuzzleBoard::GetNumSinks() {
+PuzzleBoard::GetNumSinks() const {
   return Sinks.size();
 }
 
@@ -426,4 +543,14 @@ PuzzleBoard::GetSink(const std::string &name) {
     throw std::runtime_error("No such sink on the board");
   }
   return it->second;
+}
+
+const unordered_set<string>
+PuzzleBoard::GetPlayerPieceNames() const {
+  unordered_set<string> names;
+
+  for (const auto &pl : PlayerPieces)
+    names.insert(PuzzlePiece::OrientationToPlayerPieceName[pl.first]);
+
+  return names;
 }
