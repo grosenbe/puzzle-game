@@ -23,6 +23,7 @@ enum class Orientation : char {
 
 class PuzzlePiece {
  public:
+  PuzzlePiece();
   PuzzlePiece(std::pair<uint32_t, uint32_t>, std::string);
 
   void SetPosition(std::pair<uint32_t, uint32_t>);

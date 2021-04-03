@@ -1,0 +1,22 @@
+# Sample input file
+# lines beginning with '#' are comments
+# pieces are given in (row, column) pairs
+
+# Board size
+Size 4
+
+# Player pieces (row, column)
+PP Q1 3,0
+PP Q2 3,1
+PP Q3 3,2
+
+# Sinks
+sink s 1,2
+
+# inert pieces
+inert X 1,a
+
+# Computer pieces
+CP q1 0,0
+CP q2 0,1
+CP q3 0,2

@@ -1,9 +1,13 @@
+#include <getopt.h>
+
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 
 #include "src/PuzzleBoard.h"
 #include "src/PuzzlePiece.h"
 
+using std::cerr;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -14,17 +18,44 @@ using std::vector;
 using namespace PuzzleGame;
 
 std::unique_ptr<PuzzleBoard> Board;
+std::string InputFileName;
+
+void
+DisplayHelp() {
+  cout << "Welcome to puzzle game. Options are:" << endl;
+  cout << "-f: Path (full or relative) to an input file" << endl;
+  cout << "-h: Display this help message" << endl;
+}
+
+void
+ParseCommandLine(int argc, char** argv) {
+  int c;
+
+  while ((c = getopt(argc, argv, "f:h")) != -1)
+    switch (c) {
+      case 'f':
+        InputFileName = optarg;
+        break;
+      case 'h':
+        DisplayHelp();
+        std::exit(0);
+      default:
+        std::cerr << "Unknown option. Exiting." << std::endl;
+        std::exit(1);
+    }
+}
 
 void
 GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
   bool selectionValidated = false;
+  std::unordered_set<string> playerPieceNames = Board->GetPlayerPieceNames();
   while (!selectionValidated) {
-    cout << "Available pieces to move (select one):" << endl;
-    cout << "1. Q1" << endl;
-    cout << "2. Q2" << endl;
-    cout << "3. Q3" << endl;
+    cout << "Available pieces to move:" << endl;
+    for (const auto& n : playerPieceNames)
+      cout << n << endl;
 
-    int userInput;
+    std::cout << "Input: ";
+    string userInput;
     cin >> userInput;
     if (cin.fail()) {
       cin.clear();
@@ -32,24 +63,11 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
       continue;
     }
 
-    switch (userInput) {
-      case 1:
-        piece = "Q1";
-        cout << "Selected Q1" << endl;
-        selectionValidated = true;
-        break;
-      case 2:
-        piece = "Q2";
-        cout << "Selected Q2" << endl;
-        selectionValidated = true;
-        break;
-      case 3:
-        piece = "Q3";
-        cout << "Selected Q3" << endl;
-        selectionValidated = true;
-        break;
-      default:
-        cout << "Invalid input: " << userInput << endl;
+    if (playerPieceNames.count(userInput) > 0) {
+      piece = userInput;
+      selectionValidated = true;
+    } else {
+      cout << "Piece " << userInput << " not available." << std::endl;
     }
   }
 
@@ -81,13 +99,29 @@ GetPlayerInput(std::string& piece, std::pair<uint32_t, uint32_t>& position) {
 }
 
 int
-main(int argc __attribute__((unused)), char** argv __attribute__((unused))) {
-  vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q1"), PuzzlePiece({3, 1}, "Q2"), PuzzlePiece({3, 2}, "Q3")};
-  std::vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q1"), PuzzlePiece({0, 1}, "q2"), PuzzlePiece({0, 2}, "q3")};
-  std::vector<PuzzlePiece> inert_pieces{PuzzlePiece({1, 1}, "X")};
-  std::vector<PuzzlePiece> sinks{PuzzlePiece({1, 2}, "s")};
+main(int argc, char** argv) {
+  // If we are passed a file, use it. If we aren't, try to use the default file. If default file
+  // isn't present, use the board below.
+  if (argc > 0) {
+    ParseCommandLine(argc, argv);
+  }
 
-  Board = std::unique_ptr<PuzzleBoard>(new PuzzleBoard(4, player_pieces, computer_pieces, inert_pieces, sinks));
+  if (!InputFileName.empty()) {
+    try {
+      Board = std::unique_ptr<PuzzleBoard>(new PuzzleBoard(InputFileName));
+    } catch (std::runtime_error& e) {
+      cerr << "Caught runtime exception while creating board: " << e.what() << endl;
+      abort();
+    }
+  } else {
+    cout << "No input file. Using default board." << std::endl;
+
+    vector<PuzzlePiece> player_pieces{PuzzlePiece({3, 0}, "Q1"), PuzzlePiece({3, 1}, "Q2"), PuzzlePiece({3, 2}, "Q3")};
+    std::vector<PuzzlePiece> computer_pieces{PuzzlePiece({0, 0}, "q1"), PuzzlePiece({0, 1}, "q2"), PuzzlePiece({0, 2}, "q3")};
+    std::vector<PuzzlePiece> inert_pieces{PuzzlePiece({1, 1}, "X")};
+    std::vector<PuzzlePiece> sinks{PuzzlePiece({1, 2}, "s")};
+    Board = std::unique_ptr<PuzzleBoard>(new PuzzleBoard(4, player_pieces, computer_pieces, inert_pieces, sinks));
+  }
 
   while (!Board->CheckPuzzleCompletion()) {
     Board->PrintBoard();
@@ -98,7 +132,7 @@ main(int argc __attribute__((unused)), char** argv __attribute__((unused))) {
     try {
       Board->PlayerMove(pieceToMove, requestedPosition);
     } catch (std::runtime_error& e) {
-      cout << "Caught runtime exception: " << e.what() << endl;
+      cerr << "Caught runtime exception: " << e.what() << endl;
     }
   }
 
