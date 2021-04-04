@@ -1,14 +1,8 @@
 #!/usr/bin/env bash
-sudo apt-get install clang-11 ninja-build googletest
+sudo apt-get install ninja-build
 
 export CC=$(which clang)
 export CXX=$(which clang++)
-
-mkdir /usr/src/googletest/build
-cd /usr/src/googletest/build
-cmake -G "Ninja" ..
-ninja install
-cd -
 
 mkdir build
 cd build
