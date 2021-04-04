@@ -34,7 +34,7 @@ There are currently only two command line arguments in the demo application:
  - -h (Displays the help information)
  - -f <file> (takes a path to a board description file)
 
-The Default_Input.txt file in the base directory can be used as an example for the syntax.
+The "Default_Input.txt" file in the base directory is an example for the syntax.
 
 In the absence of command line arguments, the application will use a default board configuration.
 ** Building
