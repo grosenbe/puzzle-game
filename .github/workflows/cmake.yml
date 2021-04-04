@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install prereqs
-      run: sudo ./install_build_prereqs.sh
+      run: ./install_build_prereqs.sh
 
     - name: Run build script
       run: ./ci_build.sh
