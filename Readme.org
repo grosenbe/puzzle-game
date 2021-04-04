@@ -18,15 +18,15 @@ The light beam comes in from the bottom left square of the board (r3c0 below) an
 to hit the target. The demo configuration below shows a winning board.
 
 #+BEGIN_EXAMPLE
-    C0  C1  C2  C3
+    c0  c1  c2  c3
    +---+---+---+---+
-R0 |   |q 2|   |   |
+r0 |   |q 2|   |   |
    +---+---+---+---+
-R1 |q 1| X | s |   |
+r1 |q 1| X | s |   |
    +---+---+---+---+
-R2 |Q 1|   |   |   |
+r2 |Q 1|   |   |   |
    +---+---+---+---+
-R3 |   |   |Q 2|   |
+r3 |   |   |Q 2|   |
    +---+---+---+---+
 #+END_EXAMPLE
 ** Command Line Arguments
