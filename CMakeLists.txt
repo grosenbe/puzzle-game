@@ -13,3 +13,4 @@ add_subdirectory(src)
 add_subdirectory(test)
 add_subdirectory(demo)
 
+INCLUDE("CPack_Config.cmake")

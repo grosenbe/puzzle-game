@@ -6,5 +6,4 @@ target_include_directories(puzzle-test PUBLIC
 target_link_libraries(puzzle-test
   puzzle-game
   gtest
-  gtest_main
   pthread)
