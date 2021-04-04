@@ -235,3 +235,9 @@ TEST(PuzzleTest, ThrowOnBadInputFiles) {
   EXPECT_THROW(PuzzleBoard("../test/test_input_files/misformatted2.txt"), std::runtime_error);
   EXPECT_THROW(PuzzleBoard("../test/test_input_files/misformatted3.txt"), std::runtime_error);
 }
+
+int
+main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
