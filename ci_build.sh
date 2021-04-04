@@ -15,6 +15,5 @@ cd -
 mkdir build
 cd build
 cmake -G "Ninja" ..
-ninja package
 
 valgrind test/puzzle-test

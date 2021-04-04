@@ -3,12 +3,11 @@ name: CMake
 on: [push]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
 
     steps:
     - uses: actions/checkout@v2
