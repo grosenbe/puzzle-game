@@ -4,10 +4,15 @@ sudo apt-get install clang-11 ninja-build googletest
 export CC=$(which clang)
 export CXX=$(which clang++)
 
-[ ! -d "build" ] && mkdir build
-rm -rf build/*
+mkdir /usr/src/googletest/build
+cd /usr/src/googletest/build
+cmake -G "Ninja" ..
+ninja install
+cd -
+
+mkdir build
 cd build
-cmake -G "Ninja" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=DEBUG ..
+cmake -G "Ninja" ..
 ninja package
 
 test/puzzle-test
