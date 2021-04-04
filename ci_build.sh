@@ -9,4 +9,4 @@ cd build
 cmake -G "Ninja" ..
 ninja package
 
-test/puzzle-test
+# test/puzzle-test
