@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sudo apt install clang++ ninja googletest
+sudo apt-get install clang-11 ninja-build googletest
 
 export CC=$(which clang)
 export CXX=$(which clang++)
@@ -8,6 +8,6 @@ export CXX=$(which clang++)
 rm -rf build/*
 cd build
 cmake -G "Ninja" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=DEBUG ..
-make package
+ninja package
 
 test/puzzle-test
