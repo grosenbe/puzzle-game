@@ -9,7 +9,7 @@ sudo mkdir /usr/src/googletest/build
 cd /usr/src/googletest/build
 sudo cmake -G "Ninja" ..
 sudo ninja
-sudo nina install
+sudo ninja install
 cd -
 
 mkdir build
