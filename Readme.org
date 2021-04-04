@@ -41,7 +41,7 @@ In the absence of command line arguments, the application will use a default boa
 *** Prerequisites to Build
     - gtest and gtest_main (available in most Linux distros)
     - ninja (preferred) or make
-    - A C++ compiler. This has been tested with clang 11.1.0, clang 3.8.1, g++ 10.2.0, and g++ 
+    - A C++ compiler. This has been tested with clang++ 11.1.0, clang++ 3.8.1, and g++ 10.2.0.
 *** To build on Linux
     See the ci_build shell script.
 *** To build on Windows
