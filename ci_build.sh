@@ -1,20 +1,10 @@
 #!/usr/bin/env bash
-sudo apt-get install ninja-build googletest valgrind
-
 export CC=$(which clang)
 export CXX=$(which clang++)
 
-# install googletest
-sudo mkdir /usr/src/googletest/build
-cd /usr/src/googletest/build
-sudo cmake -G "Ninja" ..
-sudo ninja
-sudo ninja install
-cd -
-
-mkdir build
+[ ! -d "build" ] && mkdir build
+rm -rf build/*
 cd build
-cmake -G "Ninja" ..
-ninja package
+cmake -G "Ninja" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=DEBUG ..
 
 valgrind test/puzzle-test
