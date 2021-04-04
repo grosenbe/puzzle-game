@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sudo apt-get install ninja-build googletest
+sudo apt-get install ninja-build googletest valgrind
 
 export CC=$(which clang)
 export CXX=$(which clang++)
@@ -17,4 +17,4 @@ cd build
 cmake -G "Ninja" ..
 ninja package
 
-test/puzzle-test
+valgrind test/puzzle-test
