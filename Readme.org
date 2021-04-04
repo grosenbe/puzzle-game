@@ -14,7 +14,7 @@ the board. r1c2 is the entry two columns to the right and 1 row down from r0c0. 
 with capital letters are player pieces, pieces beginning with lower case letters are computer
 pieces. Pieces called "X" are inert blockers, and the piece marked s is the target.
 
-The light beam comes in from the bottom left square of the board (R3C0 below) and can be reflected
+The light beam comes in from the bottom left square of the board (r3c0 below) and can be reflected
 to hit the target. The demo configuration below shows a winning board.
 
 #+BEGIN_EXAMPLE
