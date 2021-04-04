@@ -14,9 +14,13 @@ jobs:
 
     - name: Install prereqs
       run: sudo apt-get install ninja-build googletest valgrind
-
-    - name: Install googletest
-      run: sudo ./install_build_prereqs.sh
+           sudo mkdir /usr/src/googletest/build
+           sudo cd /usr/src/googletest/build
+           sudo export CC=$(which clang) && sudo export CXX=$(which clang++)
+           sudo cmake -G "Ninja" ..
+           sudo ninja
+           sudo ninja install
+           sudo cd -
 
     - name: Run build script
       run: ./ci_build.sh
